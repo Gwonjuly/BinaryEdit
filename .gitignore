@@ -1,0 +1,17 @@
+build/NoDesign/Analysis-00.toc
+build/NoDesign/base_library.zip
+build/NoDesign/EXE-00.toc
+build/NoDesign/NoDesign.exe.manifest
+build/NoDesign/NoDesign.pkg
+build/NoDesign/PKG-00.toc
+build/NoDesign/PYZ-00.pyz
+build/NoDesign/PYZ-00.toc
+build/NoDesign/warn-NoDesign.txt
+build/NoDesign/xref-NoDesign.html
+build/NoDesign/localpycs/pyimod01_archive.pyc
+build/NoDesign/localpycs/pyimod02_importers.pyc
+build/NoDesign/localpycs/pyimod03_ctypes.pyc
+build/NoDesign/localpycs/pyimod04_pywin32.pyc
+build/NoDesign/localpycs/struct.pyc
+dist/NoDesign_rev0.exe
+dist/NoDesign.exe
