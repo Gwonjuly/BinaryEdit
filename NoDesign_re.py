@@ -27,11 +27,10 @@ class FuncStorageConf: #Strut of C to Class of Python
         self.usNIBP_Adult_Init = 0              #1H
         self.usNIBP_Pedi_Init = 0               #1H
         self.usNIBP_Neo_Init = 0                #1H     16H
-        #self.ulImpLevel = array('H', [0] * 15)  #15H    15H
-        self.ulImpLevel = [0] * 15  #15H    15H
+        self.ulImpLevel = [0] * 15              #15H    15H
         self.ulImpUpperLimit = 0                #1H
         self.ulImpLowerLimit = 0                #1H     2H
-        self.reserved_s = [0] * 25  #25H    25H
+        self.reserved_s = [0] * 25              #25H    25H
         self.ubSerialNumber = bytes(12)         #12B    12B
         self.STLastDate = bytes(8)              #8B     8B
         self.SystemDataVersion = bytes(8)       #8B     8B
@@ -84,7 +83,7 @@ class FuncStorageConf: #Strut of C to Class of Python
         self.ubEtCO2_PerVolO2 = 0
         self.ubEtCO2_PerVolN2O = 0               
         self.ubDEVICE_Adjust = 0             #49B
-        self.reserved_b=bytes(36) #26B
+        self.reserved_b=bytes(36)           #26B
         
 def read_config_bin(file_path): 
     # Create an instance of FuncStorageConf to hold the data
@@ -94,11 +93,11 @@ def read_config_bin(file_path):
             # Read the binary data from the file
             binary_data = file.read()
             binary_data_size= len(binary_data)
-            print(f"binary_data_size:  {binary_data_size}")
+            #print(f"binary_data_size:  {binary_data_size}")
             
             struct_format = "<3I 16H 15H 2H 25H 12B 8B 8B 49B 36B"
             expected_size = struct.calcsize(struct_format)
-            print(f"Expected size: {expected_size} bytes")
+            #print(f"Expected size: {expected_size} bytes")
 
             
             if binary_data_size < expected_size:
@@ -108,17 +107,15 @@ def read_config_bin(file_path):
                 print("Binary data size is greater than expected. Truncating.")
                 binary_data = binary_data[:expected_size]
             
-            print(f"Final binary_data size: {len(binary_data)}")
+            #print(f"Final binary_data size: {len(binary_data)}")
             
-            
-            #print(f"relevant_data size: {len(relevant_data)}")
-            print(f"Binary data (first 100 bytes): {binary_data[:100]}")
+            #print(f"Binary data (first 100 bytes): {binary_data[:100]}")
             
             # Unpack the binary data according to the FUNC_STORAGE_CONF structure
             unpacked_data = struct.unpack(struct_format, binary_data)
             #unpacked_data=struct.unpack('<III 16H 15H 2H 25H 12B 8B 8B 49B 36B', binary_data) #<: little-endian
-            print(f"[0]: {unpacked_data[0]}")
-            print(f"[1]: {unpacked_data[1]}")
+            #print(f"[0]: {unpacked_data[0]}")
+            #print(f"[1]: {unpacked_data[1]}")
         
             # Assign the unpacked data to the corresponding fields in config_data
             config_data.ulSysErrCode = unpacked_data[0]
@@ -140,11 +137,9 @@ def read_config_bin(file_path):
             config_data.usNIBP_Adult_Init = unpacked_data[16]
             config_data.usNIBP_Pedi_Init = unpacked_data[17]
             config_data.usNIBP_Neo_Init = unpacked_data[18]                 #16H(3 ~ 18)
-            #config_data.ulImpLevel = array('H', unpacked_data[19:34])             #15H(19 ~ 33)
             config_data.ulImpLevel = list(unpacked_data[19:34])             #15H(19 ~ 33)
             config_data.ulImpUpperLimit = unpacked_data[34]
             config_data.ulImpLowerLimit = unpacked_data[35]                 #2H(34 ~ 35)
-            #config_data.reserved_s = array('H',unpacked_data[36:61])        #25H(36 ~ 60)
             config_data.reserved_s = list(unpacked_data[36:61])        #25H(36 ~ 60)
             config_data.ubSerialNumber = bytes(unpacked_data[61:73])        #12B(61 ~ 72)
             config_data.STLastDate = bytes(unpacked_data[73:81])            # 8B(73 ~ 80)
@@ -302,7 +297,7 @@ def pack_config_data(config_data):
     )
     
     
-    print(f"packed data: {packed_data}")
+    #print(f"packed data: {packed_data}")
    
     return packed_data
 
@@ -469,6 +464,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     #arr_parse=[bytes(val) for val in arr_value]
                     #value=arr_parse.encode('utf-8')
                     #value=item.text().encode("utf-8")
+                    value = item.text().strip("")
                     value = b' '.join(val.encode('utf-8') for val in arr_value)
                     setattr(self.config_data,field_name,value)
                     #print(f"Updated bytes {field_name} to {value}") """
@@ -491,31 +487,7 @@ class MainWindow(QtWidgets.QMainWindow):
         except ValueError:
             print(f"Invalid value in cell ({row}, {column}): {item.text()}")
         except Exception as e:
-            print(f"An error occurred while updating {field_name}: {e}")
-            
-    '''def update_config_data(self, row, column):
-        item=self.ui.tableWidget.item(row,column)
-        #header_item=self.ui.tableWidget.horizontalHeaderItem(column)
-        header_item=self.ui.tableWidget.item(row,0).text()
-        if header_item is None:
-            return
-        value_name=header_item
-        if value_name not in dir(self.config_data):
-            return
-        try:
-            if value_name=="ulImpLevel" or value_name=="ulSTCounter":
-                values=[int(x) for x in item.text().split()]
-                setattr(self.config_data,value_name,values)
-            else:
-                value=int(item.text())
-                setattr(self.config_data,value_name,value)
-            print(f"Updated {value_name} to {getattr(self.config_data,value_name)}")
-        except ValueError:
-            print(f"Invalid value in cell: {item.text()}")
-            pass'''
-    
-    
-                
+            print(f"An error occurred while updating {field_name}: {e}")  
     
     def write_binary(self):
         if self.config_data is not None:
@@ -547,10 +519,3 @@ if __name__ == "__main__":
     window.show()
     sys.exit(app.exec_())
     
-    #config_data = read_config_bin("config.bin")
-
-    # Print the data from the config_data object
-     #print(f"ulSysErrCode: {config_data.ulSysErrCode}")
-     #print(f"ulImpUpperLimit: {config_data.ulImpUpperLimit}")
-     #print(f"ulImpLowerLimit: {config_data.ulImpLowerLimit}")
-    # ... (print the rest of the fields)
