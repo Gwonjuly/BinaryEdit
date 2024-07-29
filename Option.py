@@ -206,7 +206,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     with open(selected_file,"wb") as file:
                         #binary_data=pack_config_data(self.config_dat a)
                         file.write(binary_data)
-                    QtWidgets.QMessageBox.information(self,"Success","CONFIG.BIN File Saved")
+                    QtWidgets.QMessageBox.information(self,"Success","OPTION.BIN File Saved")
                 except Exception as e:
                     traceback.print_exc()
                     QtWidgets.QMessageBox.critical(self,"Warning",f"Failed to save the file :{e}")
