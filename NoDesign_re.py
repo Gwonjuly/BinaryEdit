@@ -107,15 +107,11 @@ def read_config_bin(file_path):
                 print("Binary data size is greater than expected. Truncating.")
                 binary_data = binary_data[:expected_size]
             
-            #print(f"Final binary_data size: {len(binary_data)}")
-            
-            #print(f"Binary data (first 100 bytes): {binary_data[:100]}")
-            
             # Unpack the binary data according to the FUNC_STORAGE_CONF structure
             unpacked_data = struct.unpack(struct_format, binary_data)
+            
             #unpacked_data=struct.unpack('<III 16H 15H 2H 25H 12B 8B 8B 49B 36B', binary_data) #<: little-endian
-            #print(f"[0]: {unpacked_data[0]}")
-            #print(f"[1]: {unpacked_data[1]}")
+            print(f"{unpacked_data[61:73]}")
         
             # Assign the unpacked data to the corresponding fields in config_data
             config_data.ulSysErrCode = unpacked_data[0]
@@ -295,10 +291,6 @@ def pack_config_data(config_data):
         config_data.ubDEVICE_Adjust,
         *config_data.reserved_b
     )
-    
-    
-    #print(f"packed data: {packed_data}")
-   
     return packed_data
 
 
@@ -469,7 +461,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     setattr(self.config_data,field_name,value)
                     #print(f"Updated bytes {field_name} to {value}") """
                     
-                elif isinstance(attr_value, array): #and attr_value.typecode=='H':
+                elif isinstance(attr_value, bytes): #and attr_value.typecode=='H':
                     print(f"item.text(): {item.text()}")
                     #arr_value = item.text().strip("[]").split(",")    #parsing
                     arr_value = item.text().replace("array('H', [","").replace("])","").split(",")    #parsing
